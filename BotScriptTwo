@@ -59,4 +59,22 @@ function moveTowardsNearestFoodOrSeadragon() {
     }
   } else {
     // Otherwise, move towards the player with the name "Seadragon"
-    if (sead
+if (seadragonPosition) {
+  // Calculate the angle to the player with the name "Seadragon"
+  const angle = Math.atan2(seadragonPosition.y - player.y, seadragonPosition.x - player.x);
+
+  // Simulate pressing the appropriate arrow key to move towards the player with the name "Seadragon"
+  if (angle > -Math.PI / 4 && angle < Math.PI / 4) {
+    // Move right
+    simulateKeyPress('ArrowRight');
+  } else if (angle > Math.PI / 4 && angle < 3 * Math.PI / 4) {
+    // Move down
+    simulateKeyPress('ArrowDown');
+  } else if (angle > 3 * -Math.PI / 4 && angle < -Math.PI / 4) {
+    // Move left
+    simulateKeyPress('ArrowLeft');
+  } else {
+    // Move up
+    simulateKeyPress('ArrowUp');
+  }
+}
