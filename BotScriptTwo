@@ -3,6 +3,12 @@ let playerPositions = [];
 let foodPositions = [];
 let seadragonPosition;
 
+// Define the simulateKeyPress function
+function simulateKeyPress(key) {
+  const event = new KeyboardEvent('keydown', { key });
+  document.dispatchEvent(event);
+}
+
 // Set up an interval to regularly check for updates to the game data
 setInterval(() => {
   // Get the positions of all players on the page
