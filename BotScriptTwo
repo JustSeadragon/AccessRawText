@@ -1,0 +1,62 @@
+// Set up variables to track the positions of other players and food
+let playerPositions = [];
+let foodPositions = [];
+let seadragonPosition;
+
+// Set up an interval to regularly check for updates to the game data
+setInterval(() => {
+  // Get the positions of all players on the page
+  playerPositions = Array.from(document.querySelectorAll('.cell-player')).map(player => {
+    const { top, left, width, height } = player.getBoundingClientRect();
+    return { x: left + width / 2, y: top + height / 2, name: player.innerText };
+  });
+
+  // Get the position of the player with the name "Seadragon"
+  seadragonPosition = playerPositions.find(player => player.name === 'Seadragon');
+
+  // Get the positions of all food on the page
+  foodPositions = Array.from(document.querySelectorAll('.cell-food')).map(food => {
+    const { top, left } = food.getBoundingClientRect();
+    return { x: left, y: top };
+  });
+}, 1000);
+
+// Set up a function to move the player towards the nearest food or towards the player with the name "Seadragon"
+function moveTowardsNearestFoodOrSeadragon() {
+  // Get the current score of the player
+  const score = parseInt(document.querySelector('.score-container').innerText, 10);
+
+  // If the player's score is less than 100, move towards the nearest food
+  if (score < 100) {
+    // Find the food that is closest to the player
+    const player = playerPositions[0];
+    let nearestFood = foodPositions[0];
+    let nearestFoodDistance = getDistance(player, nearestFood);
+    for (const food of foodPositions) {
+      const distance = getDistance(player, food);
+      if (distance < nearestFoodDistance) {
+        nearestFood = food;
+        nearestFoodDistance = distance;
+      }
+    }
+
+    // Calculate the angle to the nearest food
+    const angle = Math.atan2(nearestFood.y - player.y, nearestFood.x - player.x);
+
+    // Simulate pressing the appropriate arrow key to move towards the nearest food
+    if (angle > -Math.PI / 4 && angle < Math.PI / 4) {
+      // Move right
+      simulateKeyPress('ArrowRight');
+    } else if (angle > Math.PI / 4 && angle < 3 * Math.PI / 4) {
+      // Move down
+      simulateKeyPress('ArrowDown');
+    } else if (angle > 3 * -Math.PI / 4 && angle < -Math.PI / 4) {
+      // Move left
+      simulateKeyPress('ArrowLeft');
+    } else {
+      // Move up
+      simulateKeyPress('ArrowUp');
+    }
+  } else {
+    // Otherwise, move towards the player with the name "Seadragon"
+    if (sead
